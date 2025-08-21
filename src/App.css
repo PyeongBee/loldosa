@@ -1,0 +1,697 @@
+/* 메인 앱 컨테이너 */
+.app {
+  min-height: 100vh;
+  padding: 20px;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(201, 170, 113, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(5, 150, 170, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(200, 155, 60, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #0a1428 0%, #1e2328 50%, #0f2027 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 배경 도트 패턴 */
+.app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle, rgba(201, 170, 113, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+  animation: drift 20s linear infinite;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(20px, 20px);
+  }
+}
+
+/* 헤더 */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.header h1 {
+  margin: 0;
+  background: linear-gradient(45deg, var(--riot-gold), var(--riot-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(201, 170, 113, 0.5);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(201, 170, 113, 0.8), 0 0 40px rgba(200, 155, 60, 0.6);
+  }
+}
+
+.subtitle {
+  color: var(--riot-light);
+  font-size: 1.2em;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+/* 캐릭터 애니메이션 */
+.character-teemo {
+  position: absolute;
+  top: -20px;
+  left: 10%;
+  font-size: 3em;
+  animation: bounce 2s infinite;
+}
+
+.character-penguin {
+  position: absolute;
+  top: -20px;
+  right: 10%;
+  font-size: 3em;
+  animation: bounce 2s infinite 1s;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 메인 컨테이너 */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 챔피언 입력 섹션 */
+.champion-input-section {
+  background: rgba(15, 32, 39, 0.6);
+  border: 3px solid var(--riot-purple);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 30px rgba(70, 55, 20, 0.5),
+    inset 0 0 30px rgba(201, 170, 113, 0.1);
+}
+
+/* 도트 테두리 효과 */
+.champion-input-section::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: 
+    linear-gradient(0deg, var(--riot-purple) 0%, transparent 100%),
+    linear-gradient(90deg, var(--riot-purple) 0%, transparent 100%),
+    linear-gradient(180deg, var(--riot-purple) 0%, transparent 100%),
+    linear-gradient(270deg, var(--riot-purple) 0%, transparent 100%);
+  background-size: 3px 100%, 100% 3px, 3px 100%, 100% 3px;
+  background-position: 0 0, 0 0, 100% 0, 0 100%;
+  background-repeat: no-repeat;
+  z-index: -1;
+  animation: border-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes border-glow {
+  0% {
+    box-shadow: 0 0 5px var(--riot-purple);
+  }
+  100% {
+    box-shadow: 0 0 20px var(--riot-purple), 0 0 30px var(--riot-accent);
+  }
+}
+
+.champion-input-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--riot-accent), var(--riot-gold), var(--riot-accent));
+  animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.section-title {
+  color: var(--riot-gold);
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* 팀 컨테이너 */
+.teams-container {
+  display: flex;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+.team {
+  flex: 1;
+  max-width: 48%;
+}
+
+.team-title {
+  color: var(--riot-light);
+  font-family: 'Orbitron', monospace;
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  text-align: center;
+  padding: 10px;
+  border: 2px solid;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.blue-team .team-title {
+  border-color: var(--riot-blue);
+  color: var(--riot-blue);
+  box-shadow: 0 0 15px rgba(5, 150, 170, 0.3);
+}
+
+.red-team .team-title {
+  border-color: var(--riot-red);
+  color: var(--riot-red);
+  box-shadow: 0 0 15px rgba(231, 76, 60, 0.3);
+}
+
+/* 챔피언 입력 필드 */
+.champion-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.champion-input-group {
+  position: relative;
+}
+
+.champion-input {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.champion-input::before {
+  content: attr(data-position);
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--riot-accent);
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* 분석 결과 섹션 */
+.analysis-section {
+  background: rgba(15, 32, 39, 0.6);
+  border: 3px solid var(--riot-accent);
+  padding: 30px;
+  position: relative;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 0 30px rgba(200, 155, 60, 0.5),
+    inset 0 0 30px rgba(201, 170, 113, 0.1);
+}
+
+.analysis-section::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, var(--riot-accent), var(--riot-gold), var(--riot-blue), var(--riot-accent));
+  z-index: -1;
+  border-radius: 0;
+}
+
+
+
+/* 웹훅 설정 */
+.webhook-config {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--riot-purple);
+  border-radius: 0;
+}
+
+.webhook-label {
+  display: block;
+  color: var(--riot-accent);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9em;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.webhook-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.9em;
+  background: rgba(10, 20, 40, 0.8);
+  border: 2px solid var(--riot-blue);
+  color: var(--riot-light);
+  padding: 10px 14px;
+}
+
+.webhook-input:focus {
+  border-color: var(--riot-accent);
+  box-shadow: 0 0 15px rgba(200, 155, 60, 0.4);
+}
+
+/* 분석 버튼 */
+.analyze-button {
+  width: 100%;
+  margin: 20px 0;
+  padding: 15px;
+  font-size: 1.2em;
+  position: relative;
+  overflow: hidden;
+}
+
+.analyze-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  animation: loading-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(201, 170, 113, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(201, 170, 113, 0.6), 0 0 40px rgba(5, 150, 170, 0.3);
+  }
+}
+
+.loading-spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.analyze-button:hover {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 로딩 상태 */
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  margin-top: 20px;
+}
+
+.loading-animation {
+  text-align: center;
+  color: var(--riot-light);
+}
+
+.loading-animation p {
+  margin: 15px 0;
+  font-family: 'Rajdhani', monospace;
+  font-size: 1.1em;
+  color: var(--riot-accent);
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--riot-gold);
+  animation: loading-bounce 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes loading-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 분석 결과 */
+.analysis-results {
+  margin-top: 20px;
+}
+
+.analysis-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.analysis-source {
+  display: inline-block;
+  background: linear-gradient(45deg, var(--riot-accent), var(--riot-gold));
+  color: var(--riot-darker);
+  padding: 8px 16px;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid var(--riot-gold);
+  box-shadow: 0 0 15px rgba(201, 170, 113, 0.5);
+}
+
+.analysis-item {
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 4px solid var(--riot-gold);
+  border-top: 1px solid rgba(201, 170, 113, 0.3);
+  border-bottom: 1px solid rgba(201, 170, 113, 0.3);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.analysis-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--riot-accent), var(--riot-gold));
+}
+
+
+
+.analysis-item h3 {
+  color: var(--riot-accent);
+  margin: 0 0 10px 0;
+  font-family: 'Orbitron', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1em;
+}
+
+.analysis-item p {
+  margin: 0;
+  color: var(--riot-light);
+  line-height: 1.6;
+}
+
+.analysis-item ul {
+  margin: 5px 0;
+  padding-left: 20px;
+  color: var(--riot-light);
+}
+
+.analysis-item li {
+  margin: 5px 0;
+  list-style-type: none;
+  position: relative;
+}
+
+.analysis-item li::before {
+  content: '▶';
+  color: var(--riot-gold);
+  margin-right: 8px;
+  font-size: 0.8em;
+}
+
+/* 마크다운 콘텐츠 스타일링 */
+.markdown-content {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 25px;
+  border-left: 4px solid var(--riot-accent);
+  border-radius: 0;
+  line-height: 1.8;
+  position: relative;
+  overflow: hidden;
+}
+
+.markdown-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--riot-accent), var(--riot-gold), var(--riot-blue));
+}
+
+
+
+/* 마크다운 헤딩 스타일 */
+.markdown-content .md-h1 {
+  color: var(--riot-gold);
+  font-family: 'Orbitron', monospace;
+  font-size: 2em;
+  font-weight: 900;
+  margin: 0 0 20px 0;
+  text-shadow: 0 0 15px rgba(201, 170, 113, 0.6);
+  border-bottom: 2px solid var(--riot-accent);
+  padding-bottom: 10px;
+}
+
+.markdown-content .md-h2 {
+  color: var(--riot-accent);
+  font-family: 'Orbitron', monospace;
+  font-size: 1.6em;
+  font-weight: 700;
+  margin: 25px 0 15px 0;
+  text-shadow: 0 0 10px rgba(200, 155, 60, 0.5);
+}
+
+.markdown-content .md-h3 {
+  color: var(--riot-blue);
+  font-family: 'Orbitron', monospace;
+  font-size: 1.3em;
+  font-weight: 600;
+  margin: 20px 0 12px 0;
+  text-shadow: 0 0 8px rgba(5, 150, 170, 0.4);
+  position: relative;
+}
+
+.markdown-content .md-h3::before {
+  content: '▶';
+  color: var(--riot-gold);
+  margin-right: 8px;
+  font-size: 0.8em;
+}
+
+.markdown-content .md-h4 {
+  color: var(--riot-light);
+  font-family: 'Rajdhani', monospace;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 15px 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 마크다운 텍스트 스타일 */
+.markdown-content .md-p {
+  color: var(--riot-light);
+  margin: 12px 0;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.markdown-content .md-strong {
+  color: var(--riot-gold);
+  font-weight: 700;
+  text-shadow: 0 0 5px rgba(201, 170, 113, 0.3);
+}
+
+.markdown-content .md-em {
+  color: var(--riot-accent);
+  font-style: italic;
+  text-shadow: 0 0 3px rgba(200, 155, 60, 0.3);
+}
+
+.markdown-content .md-code {
+  background: rgba(10, 20, 40, 0.8);
+  color: var(--riot-green);
+  padding: 2px 6px;
+  border: 1px solid var(--riot-blue);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  border-radius: 0;
+}
+
+/* 마크다운 리스트 스타일 */
+.markdown-content .md-ul {
+  margin: 15px 0;
+  padding-left: 25px;
+}
+
+.markdown-content .md-li {
+  color: var(--riot-light);
+  margin: 8px 0;
+  list-style: none;
+  position: relative;
+  line-height: 1.6;
+}
+
+.markdown-content .md-li::before {
+  content: '⚡';
+  color: var(--riot-accent);
+  position: absolute;
+  left: -20px;
+  top: 0;
+  font-size: 0.9em;
+}
+
+/* 구분선 스타일 */
+.markdown-content .md-hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--riot-accent), var(--riot-gold), var(--riot-accent), transparent);
+  margin: 25px 0;
+  position: relative;
+}
+
+.markdown-content .md-hr::after {
+  content: '⬢';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--riot-dark);
+  color: var(--riot-gold);
+  padding: 0 10px;
+  font-size: 1.2em;
+}
+
+/* 인용 블록 (blockquote) */
+.markdown-content blockquote {
+  border-left: 4px solid var(--riot-blue);
+  background: rgba(5, 150, 170, 0.1);
+  margin: 15px 0;
+  padding: 15px 20px;
+  font-style: italic;
+  color: var(--riot-light);
+  position: relative;
+}
+
+.markdown-content blockquote::before {
+  content: '"';
+  color: var(--riot-blue);
+  font-size: 3em;
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  opacity: 0.3;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .app {
+    padding: 10px;
+  }
+  
+  .main-container {
+    gap: 30px;
+  }
+  
+  .teams-container {
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .team {
+    max-width: 100%;
+  }
+  
+  .character-teemo,
+  .character-penguin {
+    display: none;
+  }
+  
+  .champion-input-section,
+  .analysis-section {
+    padding: 20px;
+  }
+  
+  .header h1 {
+    font-size: 2.5em;
+  }
+}
+

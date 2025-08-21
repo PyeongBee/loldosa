@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+:root {
+  font-family: 'Rajdhani', 'Orbitron', monospace, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: #c9aa71;
+  background: linear-gradient(135deg, #0a1428 0%, #1e2328 50%, #0f2027 100%);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* LOL 게임 컬러 팔레트 */
+  --riot-gold: #c9aa71;
+  --riot-blue: #0596aa;
+  --riot-purple: #463714;
+  --riot-dark: #0f2027;
+  --riot-darker: #0a1428;
+  --riot-light: #f0e6d2;
+  --riot-accent: #c89b3c;
+  --riot-red: #e74c3c;
+  --riot-green: #00d4aa;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a1428 0%, #1e2328 50%, #0f2027 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: var(--riot-gold);
+  text-shadow: 0 0 20px rgba(201, 170, 113, 0.5);
+  font-weight: 900;
+}
+
+h2 {
+  font-family: 'Orbitron', monospace;
+  color: var(--riot-light);
+  text-shadow: 0 0 10px rgba(240, 230, 210, 0.3);
+}
+
+/* 게이밍 버튼 스타일 */
+button {
+  border-radius: 0;
+  border: 3px solid var(--riot-accent);
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: 700;
+  font-family: 'Rajdhani', monospace;
+  background: linear-gradient(45deg, var(--riot-darker), var(--riot-dark));
+  color: var(--riot-gold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(201, 170, 113, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+button:hover {
+  border-color: var(--riot-gold);
+  box-shadow: 0 0 20px rgba(201, 170, 113, 0.5);
+  color: var(--riot-light);
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* 인풋 스타일 */
+input {
+  background: rgba(15, 32, 39, 0.8);
+  border: 2px solid var(--riot-purple);
+  color: var(--riot-light);
+  padding: 12px 16px;
+  font-family: 'Rajdhani', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 0;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--riot-accent);
+  box-shadow: 0 0 15px rgba(200, 155, 60, 0.3);
+}
+
+input::placeholder {
+  color: rgba(201, 170, 113, 0.6);
+}
+
+/* 스크롤바 커스터마이징 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--riot-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--riot-accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--riot-gold);
+}

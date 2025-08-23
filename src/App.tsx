@@ -40,7 +40,7 @@ function App() {
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState('');
+  const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
 
   const updateChampion = (team: 'blue' | 'red', index: number, name: string) => {
     const setTeam = team === 'blue' ? setBlueTeam : setRedTeam;
@@ -211,21 +211,6 @@ function App() {
         <div className="champion-input-section">
           <h2 className="section-title">챔피언 입력</h2>
           
-          {/* n8n 웹훅 URL 입력 */}
-          <div className="webhook-config">
-            <label htmlFor="webhook-url" className="webhook-label">
-              🔗 n8n 웹훅 URL
-            </label>
-            <input
-              id="webhook-url"
-              type="url"
-              className="webhook-input"
-              placeholder="https://your-n8n-instance.com/webhook/your-webhook-id"
-              value={webhookUrl}
-              onChange={(e) => setWebhookUrl(e.target.value)}
-            />
-          </div>
-          
           <div className="teams-container">
             <div className="team blue-team">
               <div className="team-title">블루팀</div>
@@ -325,7 +310,7 @@ function App() {
             <div className="analysis-results">
               <div className="analysis-header">
                 <span className="analysis-source">
-                  {webhookUrl ? '🤖 n8n AI 분석 결과' : '🔧 로컬 분석 결과'}
+                  🤖 AI 분석 결과
                 </span>
               </div>
               

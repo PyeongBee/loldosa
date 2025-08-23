@@ -1,69 +1,45 @@
-# React + TypeScript + Vite
+# 롤 5대5 구도 분석기 🎮
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+League of Legends 팀 구성 분석 도구입니다. AI를 활용하여 팀 구성의 강점, 약점, 전략을 분석합니다.
 
-Currently, two official plugins are available:
+## 🚀 배포 방법
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Vercel 배포
 
-## Expanding the ESLint configuration
+1. Vercel에 프로젝트 연결
+2. 환경변수 설정:
+   - `VITE_N8N_WEBHOOK_URL`: n8n 웹훅 URL
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 로컬 실행
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# 의존성 설치
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+# 개발 서버 실행
+npm run dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 빌드
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ 기술 스택
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React 19** + **TypeScript**
+- **Vite** (빌드 도구)
+- **React Markdown** (마크다운 렌더링)
+- **n8n** (AI 워크플로우)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📝 환경변수
+
+```env
+VITE_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/your-webhook-id
 ```
+
+## 🎯 기능
+
+- 블루팀/레드팀 챔피언 입력
+- AI 기반 팀 구성 분석
+- 강점/약점 분석
+- 전략 및 승리 조건 제시
+- 마크다운 형식 결과 표시

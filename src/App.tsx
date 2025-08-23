@@ -7,10 +7,6 @@ interface Champion {
   position: string;
 }
 
-interface TeamData {
-  champions: Champion[];
-}
-
 interface Analysis {
   teamComp: string;
   strengths: string[];
@@ -56,7 +52,7 @@ function App() {
   };
 
   // n8n 웹훅으로 데이터 전송
-  const sendToN8nWebhook = async (teamData: TeamData) => {
+  const sendToN8nWebhook = async (webhookData: any): Promise<N8nResponse | null> => {
     if (!webhookUrl.trim()) {
       alert('웹훅 URL을 입력해주세요!');
       return null;
@@ -68,14 +64,14 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(teamData),
+        body: JSON.stringify(webhookData),
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
+      const result: N8nResponse = await response.json();
       return result;
     } catch (error) {
       console.error('웹훅 전송 실패:', error);

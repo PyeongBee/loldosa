@@ -15,6 +15,16 @@ interface Analysis {
   winCondition: string;
 }
 
+interface PlayerInfo {
+  tier: string;
+  tierLevel?: string; // 다이아까지의 1-4 티어
+  tierPoints?: string; // 마스터+ 점수
+  position: string;
+  team: 'blue' | 'red';
+}
+
+type AnalysisMode = 'player' | 'spectator';
+
 interface N8nResponse {
   md?: string;
   analysis?: Analysis;
@@ -40,6 +50,14 @@ function App() {
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [analysisMode, setAnalysisMode] = useState<AnalysisMode>('spectator');
+  const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({
+    tier: '',
+    tierLevel: '',
+    tierPoints: '',
+    position: 'TOP',
+    team: 'blue'
+  });
   const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
 
   const updateChampion = (team: 'blue' | 'red', index: number, name: string) => {
@@ -101,16 +119,48 @@ function App() {
       return;
     }
 
+    // 플레이어 모드일 때 추가 검증
+    if (analysisMode === 'player') {
+      if (!playerInfo.tier) {
+        alert('전략 분석 모드에서는 티어를 선택해주세요!');
+        return;
+      }
+      
+      // 다이아까지는 티어 레벨 필수
+      if (!['마스터', '그랜드마스터', '챌린저'].includes(playerInfo.tier) && !playerInfo.tierLevel) {
+        alert('티어 레벨을 선택해주세요!');
+        return;
+      }
+      
+      // 마스터+ 는 점수 필수
+      if (['마스터', '그랜드마스터', '챌린저'].includes(playerInfo.tier) && !playerInfo.tierPoints) {
+        alert('LP 점수를 입력해주세요!');
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     // n8n으로 전송할 데이터 구성
     const webhookData = {
       timestamp: new Date().toISOString(),
+      analysisMode,
       matchData: {
         blueTeam: blueChampions,
         redTeam: redChampions,
       },
-      requestType: 'team_composition_analysis'
+      playerInfo: analysisMode === 'player' ? {
+        tier: playerInfo.tier,
+        tierLevel: playerInfo.tierLevel || null,
+        tierPoints: playerInfo.tierPoints || null,
+        position: playerInfo.position,
+        team: playerInfo.team,
+        // 완전한 티어 정보 조합
+        fullTierInfo: ['마스터', '그랜드마스터', '챌린저'].includes(playerInfo.tier) 
+          ? `${playerInfo.tier} ${playerInfo.tierPoints}LP`
+          : `${playerInfo.tier} ${playerInfo.tierLevel}티어`
+      } : null,
+      requestType: analysisMode === 'player' ? 'player_strategy_analysis' : 'match_prediction_analysis'
     };
 
     // n8n 웹훅으로 데이터 전송
@@ -209,6 +259,123 @@ function App() {
 
       <div className="main-container">
         <div className="champion-input-section">
+          <h2 className="section-title">분석 모드 선택</h2>
+          
+          {/* 분석 모드 선택 */}
+          <div className="mode-selection">
+            <button 
+              className={`mode-button ${analysisMode === 'player' ? 'active' : ''}`}
+              onClick={() => setAnalysisMode('player')}
+            >
+              🎮 전략 분석 모드
+              <span className="mode-description">내가 플레이할 전략 가이드</span>
+            </button>
+            <button 
+              className={`mode-button ${analysisMode === 'spectator' ? 'active' : ''}`}
+              onClick={() => setAnalysisMode('spectator')}
+            >
+              👁️ 경기 분석
+              <span className="mode-description">경기 흐름 예측 분석</span>
+            </button>
+          </div>
+
+          {/* 플레이어 정보 입력 (전략 분석 모드일 때만) */}
+          {analysisMode === 'player' && (
+            <div className="player-info-section">
+              <h3 className="player-info-title">🏆 내 정보</h3>
+              <div className="player-inputs">
+                <div className="input-group">
+                  <label>티어</label>
+                  <select 
+                    value={playerInfo.tier} 
+                    onChange={(e) => {
+                      setPlayerInfo({
+                        ...playerInfo, 
+                        tier: e.target.value,
+                        tierLevel: '',
+                        tierPoints: ''
+                      });
+                    }}
+                    className="tier-select"
+                  >
+                    <option value="">티어 선택</option>
+                    <option value="아이언">아이언</option>
+                    <option value="브론즈">브론즈</option>
+                    <option value="실버">실버</option>
+                    <option value="골드">골드</option>
+                    <option value="플래티넘">플래티넘</option>
+                    <option value="에메랄드">에메랄드</option>
+                    <option value="다이아몬드">다이아몬드</option>
+                    <option value="마스터">마스터</option>
+                    <option value="그랜드마스터">그랜드마스터</option>
+                    <option value="챌린저">챌린저</option>
+                  </select>
+                </div>
+                
+                {/* 다이아까지는 티어 레벨 선택 */}
+                {playerInfo.tier && !['마스터', '그랜드마스터', '챌린저'].includes(playerInfo.tier) && (
+                  <div className="input-group">
+                    <label>티어 레벨</label>
+                    <select 
+                      value={playerInfo.tierLevel || ''} 
+                      onChange={(e) => setPlayerInfo({...playerInfo, tierLevel: e.target.value})}
+                      className="tier-level-select"
+                    >
+                      <option value="">레벨 선택</option>
+                      <option value="4">4티어</option>
+                      <option value="3">3티어</option>
+                      <option value="2">2티어</option>
+                      <option value="1">1티어</option>
+                    </select>
+                  </div>
+                )}
+                
+                {/* 마스터+ 는 점수 입력 */}
+                {['마스터', '그랜드마스터', '챌린저'].includes(playerInfo.tier) && (
+                  <div className="input-group">
+                    <label>LP 점수</label>
+                    <input 
+                      type="number"
+                      placeholder="0 ~ 3000"
+                      min="0"
+                      max="3000"
+                      value={playerInfo.tierPoints || ''} 
+                      onChange={(e) => setPlayerInfo({...playerInfo, tierPoints: e.target.value})}
+                      className="tier-points-input"
+                    />
+                  </div>
+                )}
+                
+                <div className="input-group">
+                  <label>포지션</label>
+                  <select 
+                    value={playerInfo.position} 
+                    onChange={(e) => setPlayerInfo({...playerInfo, position: e.target.value})}
+                    className="position-select"
+                  >
+                    <option value="TOP">탑</option>
+                    <option value="JGL">정글</option>
+                    <option value="MID">미드</option>
+                    <option value="ADC">원딜</option>
+                    <option value="SUP">서포터</option>
+                  </select>
+                </div>
+                
+                <div className="input-group">
+                  <label>팀</label>
+                  <select 
+                    value={playerInfo.team} 
+                    onChange={(e) => setPlayerInfo({...playerInfo, team: e.target.value as 'blue' | 'red'})}
+                    className="team-select"
+                  >
+                    <option value="blue">블루팀</option>
+                    <option value="red">레드팀</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
           <h2 className="section-title">챔피언 입력</h2>
           
           <div className="teams-container">
@@ -255,10 +422,10 @@ function App() {
             {isLoading ? (
               <>
                 <span className="loading-spinner">⚡</span>
-                n8n 워크플로우 실행 중...
+                {analysisMode === 'player' ? 'AI 전략 코치 분석 중...' : 'AI 경기 예측 분석 중...'}
               </>
             ) : (
-              '🔮 팀 구성 분석하기 🔮'
+              analysisMode === 'player' ? '🎯 전략 분석 분석받기 🎯' : '🔮 경기 흐름 예측하기 🔮'
             )}
           </button>
         </div>
@@ -270,7 +437,7 @@ function App() {
             <div className="loading-state">
               <div className="loading-animation">
                 <span className="loading-spinner">⚡</span>
-                <p>n8n 워크플로우에서 AI 분석 중...</p>
+                <p>{analysisMode === 'player' ? 'AI 전략 코치가 분석 중...' : 'AI가 경기 흐름을 예측 중...'}</p>
                 <div className="loading-dots">
                   <span>●</span>
                   <span>●</span>

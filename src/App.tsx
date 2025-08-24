@@ -58,6 +58,7 @@ function App() {
     position: 'TOP',
     team: 'blue'
   });
+  const [showInfoMessage, setShowInfoMessage] = useState(false);
   const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
 
   const updateChampion = (team: 'blue' | 'red', index: number, name: string) => {
@@ -522,6 +523,23 @@ function App() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* 우측 하단 정보 버튼 */}
+      <div className="info-button-container">
+        <button 
+          className="info-button"
+          onMouseEnter={() => setShowInfoMessage(true)}
+          onMouseLeave={() => setShowInfoMessage(false)}
+          onClick={() => setShowInfoMessage(!showInfoMessage)}
+        >
+          💬
+        </button>
+        {showInfoMessage && (
+          <div className="info-message">
+            초기 버전이라 정보가 부정확하거나 오류가 발생할 수 있습니다.
+          </div>
+        )}
       </div>
     </div>
   )
